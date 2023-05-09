@@ -8,8 +8,7 @@ public class Main {
 	public static void main(String[] args) throws IOException, InterruptedException {
 		Trie trie = new Trie();
 		int stringCount = 0;
-		boolean cont = true;
-		
+
 		//String Count
 		System.out.print("How many strings? ");
 		stringCount = Integer.parseInt(input.readLine()); 
