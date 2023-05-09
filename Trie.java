@@ -20,6 +20,7 @@ public class Trie {
 			ListNode tempListNode = trieNodePointer.getChildren().getHead();
 			while (tempListNode != null) {
 				if (tempListNode.getData().getData() == newTrieNode.getData()) {
+					tempListNode.getData().setWord(i == wordLength - 1 ? true : false);
 					break;
 				}
 				tempListNode = tempListNode.getNext();
@@ -44,9 +45,20 @@ public class Trie {
 
 	public void display() throws IOException {
 		TrieNode trieNodePointer = root;
+		ListNode tempListNode;
+		char choice;
 		String display = "";
+		Boolean cont = true;
 
-		while (trieNodePointer.isWord() == false) {// Bugged
+
+		while ((trieNodePointer.isWord() == false || trieNodePointer.getChildren().getHead() != null) && cont) {
+			if (trieNodePointer.isWord() == true) {
+				System.out.println("\"" + display + "\" is already a word.");
+				cont = cont();
+				if (!cont) {
+					break;
+				}
+			}
 			if (trieNodePointer.getChildren().getHead().getNext() == null) {
 				trieNodePointer = trieNodePointer.getChildren().getHead().getData();
 				display += trieNodePointer.getData() + " ";
@@ -62,9 +74,9 @@ public class Trie {
 						+ trieNodePointer.getChildren().getContents() + "): ");
 			}
 
-			ListNode tempListNode = trieNodePointer.getChildren().getHead();
+			tempListNode = trieNodePointer.getChildren().getHead();
 
-			char choice = input.readLine().charAt(0);
+			choice = getInputChar();
 
 			while (tempListNode != null) {
 				if (choice == tempListNode.getData().getData()) {
@@ -83,6 +95,49 @@ public class Trie {
 		}
 
 		System.out.println("Display: " + display);
+	}
+
+	public boolean cont() throws IOException {
+		char decision;
+		System.out.print("\nDo you wish to continue(Y/N)? ");
+		decision = getInputChar();
+		while (true) {
+			switch (decision) {
+			case 'Y':
+				return true;
+			case 'N':
+				return false;
+			default:
+				System.out.println("Wrong input.");
+			}
+		}
+
+	}
+	
+	public static char getInputChar() throws IOException {
+		String str;
+		while (true) {
+			str = input.readLine();
+			if(str.length() > 1) {
+				System.out.println("Please enter single character only.");
+				System.out.print("Enter choice: ");
+			}else if(isParsable(str)) {
+				System.out.println("Please enter a character from the alphabet only.");
+				System.out.print("Enter choice: ");
+			}else {
+				break;
+			}
+		}
+		return str.charAt(0);
+	}
+	
+	public static boolean isParsable(String s) {
+		try {
+			Integer.parseInt(s);
+		}catch(Exception e) {
+			return false;
+		}
+		return true;
 	}
 
 }
